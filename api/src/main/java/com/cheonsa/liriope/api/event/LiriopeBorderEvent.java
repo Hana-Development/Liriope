@@ -1,0 +1,20 @@
+package com.cheonsa.liriope.api.event;
+
+import com.cheonsa.liriope.api.border.IBorder;
+import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerEvent;
+import org.jetbrains.annotations.NotNull;
+
+public abstract class LiriopeBorderEvent extends PlayerEvent {
+
+    private final IBorder border;
+
+    protected LiriopeBorderEvent(@NotNull Player player, @NotNull IBorder border) {
+        super(player);
+        this.border = border;
+    }
+
+    public @NotNull IBorder getBorder() {
+        return this.border;
+    }
+}
