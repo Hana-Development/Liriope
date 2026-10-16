@@ -7,7 +7,7 @@ Requires [Aster](https://github.com/Hana-Development/Aster) installed on the ser
 
 ## Installation
 
-Available on [Maven Central](https://central.sonatype.com/artifact/io.github.lotiny/liriope-api). Replace `VERSION` with
+Available on [Maven Central](https://central.sonatype.com/artifact/org.hanayori/liriope-api). Replace `VERSION` with
 the latest release.
 
 ### Gradle (Kotlin DSL)
@@ -18,7 +18,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly("io.github.lotiny:liriope-api:VERSION")
+    compileOnly("org.hanayori:liriope-api:VERSION")
 }
 ```
 
@@ -30,7 +30,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly 'io.github.lotiny:liriope-api:VERSION'
+    compileOnly 'org.hanayori:liriope-api:VERSION'
 }
 ```
 
@@ -38,7 +38,7 @@ dependencies {
 
 ```xml
 <dependency>
-    <groupId>io.github.lotiny</groupId>
+    <groupId>org.hanayori</groupId>
     <artifactId>liriope-api</artifactId>
     <version>VERSION</version>
     <scope>provided</scope>
@@ -67,10 +67,10 @@ dependencies:
 ## Usage
 
 ```java
-import com.cheonsa.liriope.api.ILiriopeAPI;
-import com.cheonsa.liriope.api.LiriopeAPI;
-import com.cheonsa.liriope.api.border.BorderType;
-import com.cheonsa.liriope.api.border.IBorder;
+import org.hanayori.liriope.api.ILiriopeAPI;
+import org.hanayori.liriope.api.LiriopeAPI;
+import org.hanayori.liriope.api.border.BorderType;
+import org.hanayori.liriope.api.border.IBorder;
 import org.bukkit.Color;
 
 ILiriopeAPI api = LiriopeAPI.getApi(); // null if Liriope is not enabled
