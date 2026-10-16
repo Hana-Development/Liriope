@@ -3,23 +3,6 @@ package com.cheonsa.liriope.command;
 import com.cheonsa.liriope.api.ILiriopeAPI;
 import com.cheonsa.liriope.api.border.BorderType;
 import com.cheonsa.liriope.api.border.IBorder;
-import com.cheonsa.liriope.command.sub.BandHeightCommand;
-import com.cheonsa.liriope.command.sub.CenterCommand;
-import com.cheonsa.liriope.command.sub.ColorCommand;
-import com.cheonsa.liriope.command.sub.DamageCommand;
-import com.cheonsa.liriope.command.sub.DrawIntervalCommand;
-import com.cheonsa.liriope.command.sub.GetCommand;
-import com.cheonsa.liriope.command.sub.ParticleSizeCommand;
-import com.cheonsa.liriope.command.sub.PointSpacingCommand;
-import com.cheonsa.liriope.command.sub.RemoveCommand;
-import com.cheonsa.liriope.command.sub.RowSpacingCommand;
-import com.cheonsa.liriope.command.sub.SetCommand;
-import com.cheonsa.liriope.command.sub.StatusCommand;
-import com.cheonsa.liriope.command.sub.StopCommand;
-import com.cheonsa.liriope.command.sub.TickCommand;
-import com.cheonsa.liriope.command.sub.TpCenterCommand;
-import com.cheonsa.liriope.command.sub.TypeCommand;
-import com.cheonsa.liriope.command.sub.ViewDistanceCommand;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
@@ -28,8 +11,7 @@ import org.bukkit.World;
 import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
-import revxrsal.commands.bukkit.actor.BukkitCommandActor;
-import revxrsal.commands.exception.CommandErrorException;
+import org.hanayori.aster.command.CommandException;
 
 import java.time.Duration;
 import java.util.ArrayList;
@@ -42,18 +24,7 @@ public final class BorderCommands {
         throw new IllegalStateException("Utility class cannot be initialized");
     }
 
-    public static Object[] all(ILiriopeAPI api) {
-        return new Object[]{
-            new TypeCommand(api), new SetCommand(api), new CenterCommand(api), new StopCommand(api),
-            new ColorCommand(api), new DamageCommand(api), new TickCommand(api),
-            new ParticleSizeCommand(api), new ViewDistanceCommand(api), new PointSpacingCommand(api),
-            new BandHeightCommand(api), new RowSpacingCommand(api), new DrawIntervalCommand(api),
-            new StatusCommand(api), new GetCommand(api), new TpCenterCommand(api), new RemoveCommand(api)
-        };
-    }
-
-    public static World world(BukkitCommandActor actor) {
-        CommandSender sender = actor.sender();
+    public static World world(CommandSender sender) {
         if (sender instanceof Entity entity) {
             return entity.getWorld();
         }
@@ -63,15 +34,21 @@ public final class BorderCommands {
         return Bukkit.getWorlds().getFirst();
     }
 
-    public static IBorder border(ILiriopeAPI api, BukkitCommandActor actor) {
-        return api.getBorder(world(actor));
+    public static IBorder border(ILiriopeAPI api, CommandSender sender) {
+        return api.getBorder(world(sender));
     }
 
     public static IBorder existing(ILiriopeAPI api, World world) {
         if (!api.hasBorder(world)) {
-            throw new CommandErrorException("There is no border in " + world.getName());
+            throw new CommandException("There is no border in " + world.getName());
         }
         return api.getBorder(world);
+    }
+
+    public static void atLeast(double value, double min) {
+        if (value < min) {
+            throw new CommandException("Value must be at least " + num(min));
+        }
     }
 
     public static int seconds(Duration time) {
@@ -128,7 +105,7 @@ public final class BorderCommands {
         return Character.toUpperCase(text.charAt(0)) + text.substring(1);
     }
 
-    public static void reply(BukkitCommandActor actor, String message) {
-        actor.sender().sendMessage(Component.text(message, NamedTextColor.GREEN));
+    public static void reply(CommandSender sender, String message) {
+        sender.sendMessage(Component.text(message, NamedTextColor.GREEN));
     }
 }

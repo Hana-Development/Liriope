@@ -51,6 +51,8 @@ public class Border implements IBorder {
     private int drawInterval = 8;
 
     private int tickCount;
+    private boolean drawing;
+    private boolean damaging;
     private final Set<UUID> outside = new HashSet<>();
 
     public Border(World world) {
@@ -63,33 +65,33 @@ public class Border implements IBorder {
         this.targetRadius = this.radius;
     }
 
-    public void tick(Iterable<? extends Player> players) {
+    public void tick() {
         this.updateRadius();
         this.updateOrigin();
 
         this.tickCount++;
-        boolean draw = this.tickCount % this.drawInterval == 0 && this.radius >= 1.0;
-        boolean damage = this.tickCount % this.damageTick == 0;
+        this.drawing = this.tickCount % this.drawInterval == 0 && this.radius >= 1.0;
+        this.damaging = this.tickCount % this.damageTick == 0;
+    }
 
-        for (Player player : players) {
-            if (draw) {
-                this.draw(player);
-            }
+    public void tick(Player player) {
+        if (this.drawing) {
+            this.draw(player);
+        }
 
-            if (this.isInside(player.getX(), player.getZ())) {
-                if (this.outside.remove(player.getUniqueId())) {
-                    new LiriopePlayerEnterBorderEvent(player, this).callEvent();
-                }
-                continue;
+        if (this.isInside(player.getX(), player.getZ())) {
+            if (this.outside.remove(player.getUniqueId())) {
+                new LiriopePlayerEnterBorderEvent(player, this).callEvent();
             }
+            return;
+        }
 
-            if (this.outside.add(player.getUniqueId())) {
-                new LiriopePlayerLeaveBorderEvent(player, this).callEvent();
-            }
+        if (this.outside.add(player.getUniqueId())) {
+            new LiriopePlayerLeaveBorderEvent(player, this).callEvent();
+        }
 
-            if (damage && new LiriopePlayerDamageByBorderEvent(player, this).callEvent()) {
-                player.damage(this.damage, DAMAGE_SOURCE);
-            }
+        if (this.damaging && new LiriopePlayerDamageByBorderEvent(player, this).callEvent()) {
+            player.damage(this.damage, DAMAGE_SOURCE);
         }
     }
 

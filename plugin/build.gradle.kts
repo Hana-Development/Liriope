@@ -1,12 +1,14 @@
+plugins {
+    id("org.hanayori.aster") version "1.0.0"
+}
+
 base {
     archivesName = rootProject.name
 }
 
 dependencies {
     implementation(project(":api"))
-    implementation("io.github.revxrsal:lamp.common:4.0.0-rc.18")
-    implementation("io.github.revxrsal:lamp.bukkit:4.0.0-rc.18")
-    implementation("io.github.revxrsal:lamp.brigadier:4.0.0-rc.18")
+    compileOnly("org.hanayori:aster-command")
 }
 
 tasks {

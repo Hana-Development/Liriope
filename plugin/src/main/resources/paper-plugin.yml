@@ -1,8 +1,16 @@
 name: Liriope
 version: '${version}'
 
-main: com.cheonsa.liriope.Liriope
+main: org.hanayori.aster.bootstrap.BukkitPlugin
+aster-main: com.cheonsa.liriope.Liriope
 api-version: '1.21.11'
 load: POSTWORLD
 
 authors: [ Lotiny ]
+
+dependencies:
+  server:
+    Aster:
+      load: BEFORE
+      required: true
+      join-classpath: true

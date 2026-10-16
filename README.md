@@ -3,6 +3,8 @@
 A Paper plugin for custom world borders drawn with particles: circle or square, for a whole world or for a single
 player.
 
+Requires [Aster](https://github.com/Hana-Development/Aster) installed on the server.
+
 ## Installation
 
 Available on [Maven Central](https://central.sonatype.com/artifact/io.github.lotiny/liriope-api). Replace `VERSION` with
