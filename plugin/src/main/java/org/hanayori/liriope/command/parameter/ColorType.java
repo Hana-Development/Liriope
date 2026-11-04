@@ -5,12 +5,12 @@ import org.bukkit.Color;
 import org.bukkit.command.CommandSender;
 import org.hanayori.aster.command.CommandException;
 import org.hanayori.aster.command.ParameterType;
-import org.hanayori.aster.component.Injectable;
+import org.hanayori.aster.component.Service;
 
 import java.util.Collection;
 import java.util.Locale;
 
-@Injectable
+@Service
 public final class ColorType implements ParameterType<Color> {
 
     @Override

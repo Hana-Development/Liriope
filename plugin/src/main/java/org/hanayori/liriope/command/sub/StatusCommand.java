@@ -7,7 +7,7 @@ import org.bukkit.command.CommandSender;
 import org.hanayori.aster.command.annotation.Command;
 import org.hanayori.aster.command.annotation.CommandPermission;
 import org.hanayori.aster.command.annotation.Subcommand;
-import org.hanayori.aster.component.Injectable;
+import org.hanayori.aster.component.Service;
 
 import static org.hanayori.liriope.command.BorderCommands.centerText;
 import static org.hanayori.liriope.command.BorderCommands.existing;
@@ -16,7 +16,7 @@ import static org.hanayori.liriope.command.BorderCommands.reply;
 import static org.hanayori.liriope.command.BorderCommands.sizeText;
 import static org.hanayori.liriope.command.BorderCommands.world;
 
-@Injectable
+@Service
 @Command({"worldborder", "border"})
 @CommandPermission("liriope.command.worldborder")
 public record StatusCommand(ILiriopeAPI api) {

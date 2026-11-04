@@ -9,7 +9,7 @@ import org.hanayori.aster.command.annotation.CommandConfirmation;
 import org.hanayori.aster.command.annotation.CommandPermission;
 import org.hanayori.aster.command.annotation.Optional;
 import org.hanayori.aster.command.annotation.Subcommand;
-import org.hanayori.aster.component.Injectable;
+import org.hanayori.aster.component.Service;
 
 import java.time.Duration;
 
@@ -20,7 +20,7 @@ import static org.hanayori.liriope.command.BorderCommands.over;
 import static org.hanayori.liriope.command.BorderCommands.reply;
 import static org.hanayori.liriope.command.BorderCommands.seconds;
 
-@Injectable
+@Service
 @Command({"worldborder", "border"})
 @CommandPermission("liriope.command.worldborder")
 public record SetCommand(ILiriopeAPI api) {

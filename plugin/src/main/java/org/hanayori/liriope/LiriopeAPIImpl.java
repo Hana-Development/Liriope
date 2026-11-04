@@ -5,9 +5,9 @@ import org.hanayori.liriope.api.border.IBorder;
 import org.hanayori.liriope.border.BorderManager;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
-import org.hanayori.aster.component.Injectable;
+import org.hanayori.aster.component.Service;
 
-@Injectable
+@Service
 public final class LiriopeAPIImpl implements ILiriopeAPI {
 
     private final BorderManager borderManager;

@@ -1,8 +1,7 @@
 name: Liriope
 version: '${version}'
 
-main: org.hanayori.aster.bootstrap.BukkitPlugin
-aster-main: org.hanayori.liriope.Liriope
+main: org.hanayori.liriope.Liriope
 api-version: '1.21.11'
 load: POSTWORLD
 

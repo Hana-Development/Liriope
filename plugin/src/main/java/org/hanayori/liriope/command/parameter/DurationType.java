@@ -3,7 +3,7 @@ package org.hanayori.liriope.command.parameter;
 import org.bukkit.command.CommandSender;
 import org.hanayori.aster.command.CommandException;
 import org.hanayori.aster.command.ParameterType;
-import org.hanayori.aster.component.Injectable;
+import org.hanayori.aster.component.Service;
 
 import java.time.Duration;
 import java.util.Collection;
@@ -12,7 +12,7 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@Injectable
+@Service
 public final class DurationType implements ParameterType<Duration> {
 
     private static final Pattern FORMAT = Pattern.compile("(\\d+[dhms])+");
@@ -45,7 +45,6 @@ public final class DurationType implements ParameterType<Duration> {
         }
     }
 
-    // ponytail: static list, Aster's suggest() doesn't see the typed input so no "5" -> "5s/5m" completions
     @Override
     public Collection<String> suggest(CommandSender sender) {
         return List.of("30s", "1m", "5m", "10m", "1h");

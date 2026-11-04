@@ -6,7 +6,7 @@ import org.hanayori.aster.command.annotation.Command;
 import org.hanayori.aster.command.annotation.CommandPermission;
 import org.hanayori.aster.command.annotation.Optional;
 import org.hanayori.aster.command.annotation.Subcommand;
-import org.hanayori.aster.component.Injectable;
+import org.hanayori.aster.component.Service;
 
 import java.time.Duration;
 
@@ -16,12 +16,11 @@ import static org.hanayori.liriope.command.BorderCommands.over;
 import static org.hanayori.liriope.command.BorderCommands.reply;
 import static org.hanayori.liriope.command.BorderCommands.seconds;
 
-@Injectable
+@Service
 @Command({"worldborder", "border"})
 @CommandPermission("liriope.command.worldborder")
 public record CenterCommand(ILiriopeAPI api) {
 
-    // ponytail: plain x z, no ~ relative coords; add a column-position ParameterType if needed
     @Subcommand("center")
     public void execute(CommandSender sender, double x, double z, @Optional Duration time) {
         int seconds = seconds(time);
