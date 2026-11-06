@@ -6,7 +6,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.hanayori.aster.component.Service;
-import org.hanayori.aster.component.AsterComponent;
+import org.hanayori.aster.component.PostInit;
+import org.hanayori.aster.component.PreDestroy;
 import org.hanayori.aster.schedule.Schedulers;
 
 import java.util.HashMap;
@@ -14,18 +15,18 @@ import java.util.Map;
 import java.util.UUID;
 
 @Service
-public final class BorderManager implements AsterComponent {
+public final class BorderManager {
 
     private final Map<UUID, Border> worldBorders = new HashMap<>();
     private final Map<UUID, Border> playerBorders = new HashMap<>();
     private ScheduledTask task;
 
-    @Override
+    @PostInit
     public void setup() {
         this.task = Schedulers.getGlobalScheduler().runTimer(this::tick, 1, 1);
     }
 
-    @Override
+    @PreDestroy
     public void teardown() {
         this.task.cancel();
         this.worldBorders.clear();
