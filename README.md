@@ -139,3 +139,18 @@ All events have `getBorder()` to tell which border fired.
 
 Smaller spacing or larger distance/height means more particles per player; halving a spacing doubles them. See the
 Javadoc on `IBorder` for details.
+
+### Border style
+
+```java
+border.setBorderStyle(BorderStyle.TEXT_DISPLAY);   // or /border style text_display
+```
+
+| Style                    | Looks like                                                                                    |
+|--------------------------|-----------------------------------------------------------------------------------------------|
+| `PARTICLE` (default)     | Dust particles around the player, using the visual settings above.                            |
+| `TEXT_DISPLAY`           | The vanilla world border (force-field stripes, red while shrinking, green while growing), drawn as packet-only TextDisplay panels out to each player's render distance. |
+
+`TEXT_DISPLAY` needs the resource pack built to `build/Liriope-ResourcePack.zip` by `./gradlew build`. Send it via
+`resource-pack=` in `server.properties`. Players without it see a translucent coloured wall instead. The pack changes
+the vanilla `rendertype_text` shaders and the `minecraft:default` font, so it may conflict with other packs that change them.

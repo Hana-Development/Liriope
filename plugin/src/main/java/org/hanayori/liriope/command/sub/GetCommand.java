@@ -28,7 +28,7 @@ public record GetCommand(ILiriopeAPI api) {
 
     @Subcommand("get")
     public void execute(CommandSender sender,
-                        @Suggest({"radius", "size", "width", "length", "center", "damage", "tick", "color", "origin"}) String key) {
+                        @Suggest({"radius", "size", "width", "length", "center", "damage", "tick", "color", "origin", "style"}) String key) {
         IBorder b = existing(this.api, world(sender));
         boolean square = b.getBorderType() == BorderType.SQUARE;
         if (key.equals("radius") && square) {
@@ -43,6 +43,7 @@ public record GetCommand(ILiriopeAPI api) {
             case "damage" -> "Damage: " + b.getDamage();
             case "tick" -> "Tick: every " + b.getDamageTick() + " ticks";
             case "color" -> "Color: " + hex(b.getColor());
+            case "style" -> "Style: " + b.getBorderStyle();
             case "origin" -> b.getRemainingMoveTime() == 0
                 ? "Not moving, center is " + num(b.getOriginX()) + ", " + num(b.getOriginZ())
                 : "Heading to " + num(b.getTargetOriginX()) + ", " + num(b.getTargetOriginZ()) + ", arriving in " + duration(b.getRemainingMoveTime());

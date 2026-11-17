@@ -13,3 +13,13 @@ subprojects {
         "compileOnly"("io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT")
     }
 }
+
+val resourcePack by tasks.registering(Zip::class) {
+    from("resourcepack")
+    archiveFileName = "Liriope-ResourcePack.zip"
+    destinationDirectory = layout.buildDirectory
+}
+
+tasks.register("build") {
+    dependsOn(resourcePack)
+}

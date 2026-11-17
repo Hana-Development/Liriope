@@ -1,0 +1,24 @@
+package org.hanayori.liriope.command.sub;
+
+import org.hanayori.liriope.api.ILiriopeAPI;
+import org.hanayori.liriope.api.border.BorderStyle;
+import org.bukkit.command.CommandSender;
+import org.hanayori.aster.command.annotation.Command;
+import org.hanayori.aster.command.annotation.CommandPermission;
+import org.hanayori.aster.command.annotation.Subcommand;
+import org.hanayori.aster.component.Service;
+
+import static org.hanayori.liriope.command.BorderCommands.border;
+import static org.hanayori.liriope.command.BorderCommands.reply;
+
+@Service
+@Command({"worldborder", "border"})
+@CommandPermission("liriope.command.worldborder")
+public record StyleCommand(ILiriopeAPI api) {
+
+    @Subcommand("style")
+    public void execute(CommandSender sender, BorderStyle style) {
+        border(this.api, sender).setBorderStyle(style);
+        reply(sender, "Border style set to " + style);
+    }
+}

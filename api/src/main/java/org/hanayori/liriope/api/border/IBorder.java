@@ -13,6 +13,17 @@ public interface IBorder {
     void setBorderType(BorderType type);
 
     /**
+     * How the border is drawn. Default {@link BorderStyle#PARTICLE}.
+     * The particle settings ({@link #getParticleSize()}, {@link #getViewDistance()}, {@link #getPointSpacing()},
+     * {@link #getBandHeight()}, {@link #getRowSpacing()}) only apply to {@link BorderStyle#PARTICLE};
+     * {@link BorderStyle#TEXT_DISPLAY} reaches each player's render distance and is tinted red while shrinking
+     * and green while growing.
+     */
+    BorderStyle getBorderStyle();
+
+    void setBorderStyle(BorderStyle style);
+
+    /**
      * X coordinate of the border's center right now, changes every tick while moving. Default the vanilla border's center.
      */
     double getOriginX();

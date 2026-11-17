@@ -28,3 +28,13 @@ tasks {
 tasks.withType<JavaCompile> {
     options.compilerArgs.add("-parameters")
 }
+
+dependencies {
+    testImplementation("io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT")
+    testImplementation("org.junit.jupiter:junit-jupiter:6.1.3")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher:6.1.3")
+}
+
+tasks.test {
+    useJUnitPlatform()
+}

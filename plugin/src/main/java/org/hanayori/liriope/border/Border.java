@@ -1,5 +1,6 @@
 package org.hanayori.liriope.border;
 
+import org.hanayori.liriope.api.border.BorderStyle;
 import org.hanayori.liriope.api.border.BorderType;
 import org.hanayori.liriope.api.border.IBorder;
 import org.hanayori.liriope.api.event.LiriopePlayerDamageByBorderEvent;
@@ -21,8 +22,13 @@ import java.util.UUID;
 public class Border implements IBorder {
 
     private static final DamageSource DAMAGE_SOURCE = DamageSource.builder(DamageType.OUTSIDE_BORDER).build();
+    private static final Color SHRINKING = Color.fromRGB(0xFF3030);
+    private static final Color GROWING = Color.fromRGB(0x40FF80);
+    private static final int KEYFRAME_TICKS = 20;
 
     private BorderType type = BorderType.CIRCLE;
+    private BorderStyle style = BorderStyle.PARTICLE;
+    private Outline outline;
     private double originX;
     private double originZ;
     private double startX;
@@ -51,7 +57,7 @@ public class Border implements IBorder {
     private int drawInterval = 8;
 
     private int tickCount;
-    private boolean drawing;
+    private boolean redrawTick;
     private boolean damaging;
     private final Set<UUID> outside = new HashSet<>();
 
@@ -63,19 +69,23 @@ public class Border implements IBorder {
         this.targetZ = this.originZ;
         this.radius = vanilla.getSize() / 2;
         this.targetRadius = this.radius;
+        this.outline = Outline.of(this.type, this.radius);
     }
 
     public void tick() {
         this.updateRadius();
         this.updateOrigin();
+        if (!this.outline.fits(this.radius)) {
+            this.outline = Outline.of(this.type, this.radius);
+        }
 
         this.tickCount++;
-        this.drawing = this.tickCount % this.drawInterval == 0 && this.radius >= 1.0;
+        this.redrawTick = this.tickCount % this.drawInterval == 0;
         this.damaging = this.tickCount % this.damageTick == 0;
     }
 
     public void tick(Player player) {
-        if (this.drawing) {
+        if (this.redrawTick && this.style == BorderStyle.PARTICLE && this.radius >= 1.0) {
             this.draw(player);
         }
 
@@ -93,6 +103,58 @@ public class Border implements IBorder {
         if (this.damaging && new LiriopePlayerDamageByBorderEvent(player, this).callEvent()) {
             player.damage(this.damage, DAMAGE_SOURCE);
         }
+    }
+
+    public Outline getOutline() {
+        return this.outline;
+    }
+
+    public boolean isRedrawTick() {
+        return this.redrawTick;
+    }
+
+    public Color getDisplayColor() {
+        if (this.targetRadius < this.radius) return SHRINKING;
+        if (this.targetRadius > this.radius) return GROWING;
+        return this.color;
+    }
+
+    /**
+     * Ticks from now to the next keyframe while the border moves, else 0. Keyframes fall on redraw ticks about
+     * once a second, and where a motion ends. Motion is linear, so a view sends where the border will be at the
+     * keyframe and lets the client interpolate there: one update per panel per keyframe instead of per redraw.
+     */
+    public int getLead() {
+        int left = Integer.MAX_VALUE;
+        if (this.radius != this.targetRadius) left = this.durationTicks - this.elapsedTicks;
+        if (this.originX != this.targetX || this.originZ != this.targetZ) left = Math.min(left, this.moveTicks - this.moveElapsed);
+        if (left == Integer.MAX_VALUE) return 0;
+        int every = this.drawInterval * Math.ceilDiv(KEYFRAME_TICKS, this.drawInterval);  // keyframes on redraw ticks
+        return Math.min(left, every - this.tickCount % every);
+    }
+
+    public double radiusIn(int ticks) {
+        if (this.radius == this.targetRadius) return this.radius;
+        int t = this.elapsedTicks + ticks;
+        return t >= this.durationTicks ? this.targetRadius : lerp(this.startRadius, this.targetRadius, (double) t / this.durationTicks);
+    }
+
+    public double originXIn(int ticks) {
+        return this.originIn(ticks, this.startX, this.targetX, this.originX);
+    }
+
+    public double originZIn(int ticks) {
+        return this.originIn(ticks, this.startZ, this.targetZ, this.originZ);
+    }
+
+    private double originIn(int ticks, double start, double target, double now) {
+        if (this.originX == this.targetX && this.originZ == this.targetZ) return now;
+        int t = this.moveElapsed + ticks;
+        return t >= this.moveTicks ? target : lerp(start, target, (double) t / this.moveTicks);
+    }
+
+    private static double lerp(double a, double b, double t) {
+        return a + (b - a) * t;
     }
 
     private void updateRadius() {
@@ -125,7 +187,7 @@ public class Border implements IBorder {
         }
     }
 
-    private boolean isInside(double x, double z) {
+    boolean isInside(double x, double z) {
         double dx = x - this.originX;
         double dz = z - this.originZ;
         return switch (this.type) {
@@ -202,6 +264,17 @@ public class Border implements IBorder {
     @Override
     public void setBorderType(BorderType type) {
         this.type = type;
+        this.outline = Outline.of(type, this.radius);
+    }
+
+    @Override
+    public BorderStyle getBorderStyle() {
+        return this.style;
+    }
+
+    @Override
+    public void setBorderStyle(BorderStyle style) {
+        this.style = style;
     }
 
     @Override

@@ -27,6 +27,7 @@ public record StatusCommand(ILiriopeAPI api) {
         IBorder b = existing(this.api, world);
         reply(sender, "Border of " + world.getName() + ":"
             + "\n Shape: " + b.getBorderType()
+            + "\n Style: " + b.getBorderStyle()
             + "\n Center: " + centerText(b)
             + "\n Size: " + sizeText(b)
             + "\n Damage: " + b.getDamage() + " every " + b.getDamageTick() + " ticks"
